@@ -34,13 +34,11 @@ These scripts establish the empirical baseline of how toxic each client's flow i
 
 q1.py (Adversity Profile): Calculates the historical probability that a trade will move against the market maker. A trade is defined as mathematically "adverse" if the mark-to-market PnL at time $\tau$ is negative:
 
-P(Adverse) = \frac{1}{N} \sum_{i=1}^{N} \mathbb{I} \Big(Side_i \times (M_{i,\tau} - P_{trade, i}) < 0 \Big)
-
+$$P(Adverse) = \frac{1}{N} \sum_{i=1}^{N} \mathbb{I} \Big(Side_i \times (M_{i,\tau} - P_{trade, i}) < 0 \Big)$$
 
 q2.py (Profitability & Spread): Calculates the Expected PnL per client and computes the minimum theoretical half-spread ($\delta^*$) required to break even against their specific informed flow. It calculates the volume-weighted required delta:
 
-\delta^*_c = \max \left( 0, \frac{\sum_{i \in c} \Big( -Side_i \times (\mathbb{E}[M_\tau]_i - M_{0,i}) \times Volume_i \Big)}{\sum_{i \in c} Volume_i} \right)
-
+$$\delta^*_c = \max \left( 0, \frac{\sum_{i \in c} \Big( -Side_i \times (\mathbb{E}[M_\tau]_i - M_{0,i}) \times Volume_i \Big)}{\sum_{i \in c} Volume_i} \right)$$
 
 Phase 2: Predictive Toxicity Modeling (q3.py)
 
@@ -58,8 +56,7 @@ Standard ML metrics (like a 0.50 probability threshold) are suboptimal for tradi
 
 The Math: It dynamically calculates a client-specific externalization threshold ($\theta^*$) on the validation fold to maximize simulated out-of-sample PnL. If the model's predicted toxicity $\alpha$ exceeds $\theta^*$, the algorithm will defensively reject or widen quotes for that client.
 
-\theta^*_c = \arg\max_{\theta} \sum_{i \in c, \ \alpha_i \le \theta} \Big( Side_i \times Volume_i \times (M_{i,\tau} - P_{trade, i}) \Big)
-
+$$\theta^*_c = \arg\max_{\theta} \sum_{i \in c, \ \alpha_i \le \theta} \Big( Side_i \times Volume_i \times (M_{i,\tau} - P_{trade, i}) \Big)$$
 
 Phase 4: Dynamic Execution Engine (q5.py)
 
@@ -73,11 +70,9 @@ Inventory Skew: Shifts the midpoint to dump excess inventory $I$ before the end 
 
 The Quoting Equations:
 
-\delta_{bid} = (W_{vol} \cdot \sigma) + (W_{adv} \cdot \alpha \cdot \sigma) + Skew
+$$\delta_{bid} = (W_{vol} \cdot \sigma) + (W_{adv} \cdot \alpha \cdot \sigma) + Skew$$
 
-
-\delta_{ask} = (W_{vol} \cdot \sigma) + (W_{adv} \cdot \alpha \cdot \sigma) - Skew
-
+$$\delta_{ask} = (W_{vol} \cdot \sigma) + (W_{adv} \cdot \alpha \cdot \sigma) - Skew$$
 
 Where:
 
